@@ -1,14 +1,22 @@
 ---
 # tasks file for donfilemon.ntp
+- name: Stop and disable Chronyd
+  service:
+    name: chronyd
+    state: stopped
+    enabled: no
+  ignore_errors: yes
 - name: install the NTP
   yum:
     name: ntp
     state: present
 - name: Add ntp configuration
-  template: src=ntp.conf.j2 dest=/etc/ntp.conf
+  template: 
+    src: ntp.conf.j2 
+    dest: /etc/ntp.conf
     backup: yes
-    register: conf
-- name: Start service ntpd if not started and enable autostart (FOR CentOS 6 and RedHat 6)
+  register: conf
+- name: Start service ntpd if not started and enable autostart 
   service:
     name: ntpd
     state: started
