@@ -4,28 +4,20 @@
   yum:
     name: ntp
     state: present
-- name: Add https ntp configuration
+- name: Add ntp configuration
   template: src=ntp.conf.j2 dest=/etc/ntp.conf
-- name: Start NTPD (FOR CentOS 7 AND RedHat 7)
-  systemd: name=ntpd state=started
-  when: ansible_os_family == 'RedHat' and ansible_distribution_version.split('.')[0] == '7' or ansible_os_family == 'CentOS' and ansible_distribution_version.split('.')[0] == '7'
+    backup: yes
+    register: conf
 - name: Start service ntpd if not started and enable autostart (FOR CentOS 6 and RedHat 6)
   service:
     name: ntpd
     state: started
     enabled: yes
-  when: ansible_os_family == 'RedHat' and ansible_distribution_version.split('.')[0] == '6' or ansible_os_family == 'CentOS' and ansible_distribution_version.split('.')[0] == '6'
-- name: Enable NTPD
-  systemd: name=ntpd enabled=yes
-  when: ansible_os_family == 'RedHat' and ansible_distribution_version.split('.')[0] == '7' or ansible_os_family == 'CentOS' and ansible_distribution_version.split('.')[0] == '7'
-- name: Restart NTPD
-  systemd: name=ntpd state=restarted
-  when: ansible_os_family == 'RedHat' and ansible_distribution_version.split('.')[0] == '7' or ansible_os_family == 'CentOS' and ansible_distribution_version.split('.')[0] == '7'
 - name: Restart service ntpd, in all cases
   service:
     name: ntpd
     state: restarted
-  when: ansible_os_family == 'RedHat' and ansible_distribution_version.split('.')[0] == '6' or ansible_os_family == 'CentOS' and ansible_distribution_version.split('.')[0] == '6'
+  when: conf.changed
 
 
 
