@@ -1,0 +1,9 @@
+# Hosts on local network are less restricted.
+restrict {{ network_addr}} mask {{ mask_addr }} nomodify no trap
+
+# Use public servers from the pool.ntp.org project.
+# Plese consider joining the pool (http://www.pool.ntp.org/join.html).
+
+{% for item in ntp_servers %}
+server {{ item }}
+{% endfor %}

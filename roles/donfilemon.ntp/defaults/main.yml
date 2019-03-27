@@ -1,0 +1,4 @@
+---
+# defaults file for donfilemon.ntp
+network_addr: 192.168.227.0
+mask_addr: 255.255.255.0
